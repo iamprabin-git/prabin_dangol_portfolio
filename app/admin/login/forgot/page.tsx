@@ -3,6 +3,7 @@ import { ForgotPasswordForm } from "@/components/admin/forgot-form";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getSite } from "@/lib/content";
+import { canPersistWrites } from "@/lib/storage";
 
 export const metadata = {
   title: "Forgot password",
@@ -50,7 +51,7 @@ export default async function ForgotPasswordPage() {
             Use {site.email} unless you set <code>ADMIN_EMAIL</code>. Then pick a new studio
             password.
           </p>
-          <ForgotPasswordForm recoveryHint={site.email} />
+          <ForgotPasswordForm recoveryHint={site.email} canSave={canPersistWrites()} />
         </div>
       </div>
     </div>

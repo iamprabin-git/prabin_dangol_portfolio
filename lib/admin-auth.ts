@@ -82,12 +82,6 @@ export async function getStoredAuth(): Promise<StoredAuth | null> {
 }
 
 export async function saveAdminPassword(password: string) {
-  if (isVercel() && !hasDatabase() && !hasBlobStore()) {
-    throw new Error(
-      "This host cannot store a new password. Connect Vercel Postgres (Neon) or set ADMIN_PASSWORD and redeploy.",
-    );
-  }
-
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const record: StoredAuth = {
     salt: bytesToHex(salt),
@@ -97,8 +91,15 @@ export async function saveAdminPassword(password: string) {
   const payload = JSON.stringify(record, null, 2);
 
   if (hasDatabase()) {
-    await setRecord(AUTH_BLOB, record);
-    return;
+    try {
+      await setRecord(AUTH_BLOB, record);
+      return;
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "database error";
+      throw new Error(
+        `Could not save the password to Vercel Postgres. Redeploy after connecting Neon. ${detail}`,
+      );
+    }
   }
 
   if (hasBlobStore()) {
@@ -109,6 +110,12 @@ export async function saveAdminPassword(password: string) {
       contentType: "application/json",
     });
     return;
+  }
+
+  if (isVercel()) {
+    throw new Error(
+      "No database is connected to this deployment yet. In Vercel open Storage → Create Database → Neon, connect Production, then Redeploy. After that, reset the password again. Until then, sign in with the ADMIN_PASSWORD environment variable.",
+    );
   }
 
   await fs.mkdir(path.dirname(AUTH_FILE), { recursive: true });

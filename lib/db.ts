@@ -3,16 +3,61 @@ import { neon } from "@neondatabase/serverless";
 type Sql = ReturnType<typeof neon>;
 
 let schemaReady: Promise<void> | null = null;
+let cachedUrl: string | undefined;
+
+function trimEnv(value: string | undefined) {
+  return (value || "").trim().replace(/^['"]|['"]$/g, "");
+}
+
+function asPostgresUrl(value: string) {
+  const url = value.replace(/^prisma\+/, "");
+  if (!url.startsWith("postgres://") && !url.startsWith("postgresql://")) return "";
+  // Neon serverless (HTTP) does not support SCRAM channel binding.
+  return url.replace(/([?&])channel_binding=require&?/g, "$1").replace(/[?&]$/, "");
+}
 
 export function databaseUrl() {
-  return (
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_URL ||
-    process.env.POSTGRES_PRISMA_URL ||
-    process.env.DATABASE_URL_UNPOOLED ||
-    process.env.POSTGRES_URL_NON_POOLING ||
-    ""
+  if (cachedUrl !== undefined) return cachedUrl;
+
+  const named = [
+    process.env.POSTGRES_URL,
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL_NON_POOLING,
+    process.env.DATABASE_URL_UNPOOLED,
+    process.env.POSTGRES_PRISMA_URL,
+    process.env.NEON_DATABASE_URL,
+    process.env.POSTGRES_URL_NO_SSL,
+  ];
+  for (const candidate of named) {
+    const url = asPostgresUrl(trimEnv(candidate));
+    if (url) {
+      cachedUrl = url;
+      return url;
+    }
+  }
+
+  const host = trimEnv(process.env.POSTGRES_HOST || process.env.PGHOST);
+  const user = trimEnv(process.env.POSTGRES_USER || process.env.PGUSER);
+  const password = trimEnv(process.env.POSTGRES_PASSWORD || process.env.PGPASSWORD);
+  const database = trimEnv(
+    process.env.POSTGRES_DATABASE || process.env.PGDATABASE || process.env.POSTGRES_DB,
   );
+  if (host && user && password && database) {
+    cachedUrl = `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}/${database}?sslmode=require`;
+    return cachedUrl;
+  }
+
+  for (const [key, value] of Object.entries(process.env)) {
+    if (!/POSTGRES|DATABASE|NEON|^PG/i.test(key)) continue;
+    const url = asPostgresUrl(trimEnv(value));
+    if (url) {
+      cachedUrl = url;
+      return url;
+    }
+  }
+
+  cachedUrl = "";
+  return cachedUrl;
 }
 
 export function hasDatabase() {
@@ -64,10 +109,10 @@ export async function getRecord<T>(key: string): Promise<T | null> {
 
 export async function setRecord<T>(key: string, value: T) {
   await ensureSchema();
-  const payload = JSON.stringify(value);
-  await sql()`
+  const db = sql();
+  await db`
     INSERT INTO portfolio_records (key, value, updated_at)
-    VALUES (${key}, ${payload}::jsonb, NOW())
+    VALUES (${key}, ${JSON.stringify(value)}::jsonb, NOW())
     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()
   `;
 }
