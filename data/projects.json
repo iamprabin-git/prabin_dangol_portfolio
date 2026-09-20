@@ -12,6 +12,7 @@
       "Tailwind"
     ],
     "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894987/portfolio/projects/northstar-commerce.jpg",
+    "logoUrl": "",
     "liveUrl": "https://demo.vercel.store",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -32,6 +33,7 @@
       "Auth"
     ],
     "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894988/portfolio/projects/lumen-analytics.jpg",
+    "logoUrl": "",
     "liveUrl": "https://ui.shadcn.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -52,6 +54,7 @@
       "PWA"
     ],
     "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894989/portfolio/projects/fieldnote.jpg",
+    "logoUrl": "",
     "liveUrl": "https://www.notion.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -72,6 +75,7 @@
       "API"
     ],
     "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894989/portfolio/projects/atlas-stay.jpg",
+    "logoUrl": "",
     "liveUrl": "https://www.airbnb.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,

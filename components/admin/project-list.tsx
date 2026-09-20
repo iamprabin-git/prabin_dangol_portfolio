@@ -35,7 +35,7 @@ export function ProjectList({
       <div className="admin-card grid place-items-center px-6 py-20 text-center">
         <p className="font-display text-2xl font-bold">No projects yet</p>
         <p className="mt-2 max-w-sm text-sm text-[var(--muted)]">
-          Add a cover, write-up, and live URL. Featured work shows on the home page.
+          Add a cover, project mark logo, write-up, and live URL. Featured work shows on the home page.
         </p>
         <Link
           href="/admin/projects/new"

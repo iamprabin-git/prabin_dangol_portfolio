@@ -59,7 +59,11 @@ export async function migrateExistingImages() {
       project.imageUrl,
       `portfolio/projects/${project.slug || project.id}`,
     );
-    nextProjects.push({ ...project, imageUrl });
+    const logoUrl = await migrateUrl(
+      project.logoUrl || "",
+      `portfolio/projects/${project.slug || project.id}-logo`,
+    );
+    nextProjects.push({ ...project, imageUrl, logoUrl: logoUrl || "" });
   }
   await writeProjects(nextProjects);
 
@@ -74,6 +78,7 @@ export async function migrateExistingImages() {
     projects: nextProjects.map((project) => ({
       slug: project.slug,
       cloudinary: isCloudinaryUrl(project.imageUrl),
+      logo: !project.logoUrl || isCloudinaryUrl(project.logoUrl),
     })),
   };
 }

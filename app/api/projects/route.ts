@@ -22,6 +22,7 @@ export async function POST(request: Request) {
   try {
     const form = await request.formData();
     const image = form.get("image");
+    const logo = form.get("logo");
     const project = await createProject(
       {
         title: String(form.get("title") || ""),
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
         year: String(form.get("year") || ""),
       },
       image instanceof File ? image : null,
+      logo instanceof File ? logo : null,
     );
     return NextResponse.json({ project });
   } catch (error) {

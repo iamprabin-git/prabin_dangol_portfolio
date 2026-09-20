@@ -21,6 +21,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     const form = await request.formData();
     const image = form.get("image");
+    const logo = form.get("logo");
     const project = await updateProject(
       id,
       {
@@ -34,6 +35,7 @@ export async function PATCH(request: Request, context: RouteContext) {
         year: String(form.get("year") || ""),
       },
       image instanceof File ? image : null,
+      logo instanceof File ? logo : null,
     );
     return NextResponse.json({ project });
   } catch (error) {

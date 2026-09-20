@@ -11,6 +11,7 @@ export function ProjectForm({ project }: { project?: Project }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(project?.imageUrl || "");
+  const [logoPreview, setLogoPreview] = useState(project?.logoUrl || "");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,24 +104,52 @@ export function ProjectForm({ project }: { project?: Project }) {
           />
         </label>
       </div>
-      <label className={labelClass}>
-        Cover image
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) setPreview(URL.createObjectURL(file));
-          }}
-          className={`${inputClass} border-dashed`}
-        />
-      </label>
-      {preview ? (
-        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-[var(--bg)]">
-          <CoverImage src={preview} alt="Cover preview" />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-3">
+          <label className={labelClass}>
+            Cover image
+            <input
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) setPreview(URL.createObjectURL(file));
+              }}
+              className={`${inputClass} border-dashed`}
+            />
+          </label>
+          {preview ? (
+            <div className="aspect-[16/9] overflow-hidden rounded-lg bg-[var(--bg)]">
+              <CoverImage src={preview} alt="Cover preview" />
+            </div>
+          ) : null}
         </div>
-      ) : null}
+        <div className="grid gap-3">
+          <label className={labelClass}>
+            Project mark / logo
+            <span className="block font-sans text-[12px] font-normal normal-case tracking-normal text-[var(--muted)]">
+              Separate from the cover. PNG or SVG, 4MB max. Project marks swipe 4 at a time on desktop and 2 on mobile.
+            </span>
+            <input
+              name="logo"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) setLogoPreview(URL.createObjectURL(file));
+              }}
+              className={`${inputClass} border-dashed`}
+            />
+          </label>
+          {logoPreview ? (
+            <div className="grid h-28 place-items-center rounded-lg border border-[var(--line)] bg-[var(--bg)] px-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logoPreview} alt="Logo preview" className="max-h-16 max-w-full object-contain" />
+            </div>
+          ) : null}
+        </div>
+      </div>
       <label className="flex items-center gap-3 text-[13px]">
         <input
           name="featured"

@@ -8,11 +8,15 @@ import {
 import { deleteReviewsForProject } from "./reviews";
 import type { Project, ProjectInput } from "./types";
 
+function withLogo(project: Project): Project {
+  return { ...project, logoUrl: project.logoUrl || "" };
+}
+
 export async function getProjects() {
   const projects = await readProjects();
-  return [...projects].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+  return [...projects]
+    .map(withLogo)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 export async function getFeaturedProjects() {
@@ -42,10 +46,11 @@ function normalizeInput(input: ProjectInput): ProjectInput {
     featured: Boolean(input.featured),
     year: input.year.trim() || String(new Date().getFullYear()),
     imageUrl: input.imageUrl,
+    logoUrl: input.logoUrl,
   };
 }
 
-export async function createProject(input: ProjectInput, image?: File | null) {
+export async function createProject(input: ProjectInput, image?: File | null, logo?: File | null) {
   const data = normalizeInput(input);
   if (!data.title) throw new Error("A title is required.");
   if (!data.summary) throw new Error("A short summary is required.");
@@ -53,6 +58,7 @@ export async function createProject(input: ProjectInput, image?: File | null) {
   const projects = await readProjects();
   const now = new Date().toISOString();
   const imageUrl = image && image.size > 0 ? await saveImage(image) : data.imageUrl || "";
+  const logoUrl = logo && logo.size > 0 ? await saveImage(logo) : data.logoUrl || "";
 
   const project: Project = {
     id: crypto.randomUUID(),
@@ -65,6 +71,7 @@ export async function createProject(input: ProjectInput, image?: File | null) {
     description: data.description || data.summary,
     tags: data.tags,
     imageUrl,
+    logoUrl,
     liveUrl: data.liveUrl,
     githubUrl: data.githubUrl,
     featured: data.featured,
@@ -81,6 +88,7 @@ export async function updateProject(
   id: string,
   input: ProjectInput,
   image?: File | null,
+  logo?: File | null,
 ) {
   const data = normalizeInput(input);
   if (!data.title) throw new Error("A title is required.");
@@ -90,13 +98,21 @@ export async function updateProject(
   const index = projects.findIndex((project) => project.id === id);
   if (index === -1) throw new Error("Project not found.");
 
-  const current = projects[index];
+  const current = withLogo(projects[index]);
   let imageUrl = current.imageUrl;
+  let logoUrl = current.logoUrl;
 
   if (image && image.size > 0) {
     imageUrl = await saveImage(image);
     if (current.imageUrl && current.imageUrl !== imageUrl) {
       await deleteStoredImage(current.imageUrl);
+    }
+  }
+
+  if (logo && logo.size > 0) {
+    logoUrl = await saveImage(logo);
+    if (current.logoUrl && current.logoUrl !== logoUrl) {
+      await deleteStoredImage(current.logoUrl);
     }
   }
 
@@ -115,6 +131,7 @@ export async function updateProject(
     featured: data.featured,
     year: data.year,
     imageUrl,
+    logoUrl,
     updatedAt: new Date().toISOString(),
   };
 
@@ -131,5 +148,6 @@ export async function deleteProject(id: string) {
 
   await writeProjects(projects.filter((project) => project.id !== id));
   await deleteStoredImage(current.imageUrl);
+  await deleteStoredImage(current.logoUrl || "");
   await deleteReviewsForProject(id);
 }

@@ -6,6 +6,7 @@ export type Project = {
   description: string;
   tags: string[];
   imageUrl: string;
+  logoUrl: string;
   liveUrl: string;
   githubUrl: string;
   featured: boolean;
@@ -45,6 +46,7 @@ export type ProjectInput = {
   featured: boolean;
   year: string;
   imageUrl?: string;
+  logoUrl?: string;
 };
 
 export type ServiceItem = {

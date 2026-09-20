@@ -106,14 +106,18 @@ export async function writeJsonRecord<T>(blobPath: string, fileName: string, val
   await fs.writeFile(filePath, payload, "utf8");
 }
 
+function withLogoUrl(project: Project): Project {
+  return { ...project, logoUrl: project.logoUrl || "" };
+}
+
 async function readSeed(): Promise<Project[]> {
   const raw = await fs.readFile(DATA_FILE, "utf8");
-  return JSON.parse(raw) as Project[];
+  return (JSON.parse(raw) as Project[]).map(withLogoUrl);
 }
 
 export async function readProjects(): Promise<Project[]> {
   const fromStore = await readJsonRecord<Project[]>(PROJECTS_BLOB, "projects.json");
-  if (fromStore) return fromStore;
+  if (fromStore) return fromStore.map(withLogoUrl);
   try {
     return await readSeed();
   } catch {
