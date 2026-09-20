@@ -2,8 +2,10 @@ import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { HistoryGraph } from "@/components/history-graph";
 import { ProjectCard } from "@/components/project-card";
+import { SkillsSection } from "@/components/skills-section";
 import { WhatsAppButton } from "@/components/whatsapp-widget";
 import { displayName, getSite, skillItems } from "@/lib/content";
+import { sanitizeSkills } from "@/lib/skills";
 import { interpolate, navHref } from "@/lib/copy";
 import { getFeaturedProjects } from "@/lib/projects";
 import { getReviewStats } from "@/lib/reviews";
@@ -157,16 +159,30 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HistoryGraph
-        items={site.timeline}
-        copy={{
-          timelineKicker: site.copy.timelineKicker,
-          timelineHeading: site.copy.timelineHeading,
-          timelineWeb: site.copy.timelineWeb,
-          timelineDesign: site.copy.timelineDesign,
-          timelineEmpty: site.copy.timelineEmpty,
-        }}
-      />
+      <div className="border-y border-[var(--line)] bg-[var(--bg-soft)]">
+        <SkillsSection
+          groups={sanitizeSkills(site.skills)}
+          timeline={site.timeline}
+          copy={{
+            skillsKicker: site.copy.skillsKicker,
+            skillsHeading: site.copy.skillsHeading,
+            skillsLevel: site.copy.skillsLevel,
+            skillsYear: site.copy.skillsYear,
+            skillsEmpty: site.copy.skillsEmpty,
+          }}
+        />
+        <HistoryGraph
+          className="pt-4 sm:pt-6"
+          items={site.timeline}
+          copy={{
+            timelineKicker: site.copy.timelineKicker,
+            timelineHeading: site.copy.timelineHeading,
+            timelineWeb: site.copy.timelineWeb,
+            timelineDesign: site.copy.timelineDesign,
+            timelineEmpty: site.copy.timelineEmpty,
+          }}
+        />
+      </div>
 
       <section id="contact" className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:gap-12 sm:px-8 sm:py-20 lg:grid-cols-2">
         <div className="min-w-0">

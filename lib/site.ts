@@ -31,6 +31,7 @@ export const defaultSite: SiteContent = {
   navigation: [
     { id: "work", label: "Work", href: "/#work" },
     { id: "about", label: "About", href: "/#about" },
+    { id: "skills", label: "Skills", href: "/#skills" },
     { id: "history", label: "History", href: "/#history" },
     { id: "projects", label: "Projects", href: "/projects" },
     { id: "contact", label: "Contact", href: "/#contact" },
@@ -60,17 +61,35 @@ export const defaultSite: SiteContent = {
     {
       id: "languages",
       label: "Languages",
-      items: ["TypeScript", "JavaScript", "HTML", "CSS", "SQL"],
+      items: [
+        { name: "TypeScript", level: 90, year: "2023" },
+        { name: "JavaScript", level: 92, year: "2021" },
+        { name: "HTML", level: 94, year: "2021" },
+        { name: "CSS", level: 90, year: "2021" },
+        { name: "SQL", level: 78, year: "2023" },
+      ],
     },
     {
       id: "frameworks",
       label: "Frameworks",
-      items: ["Next.js", "React", "Node.js", "Tailwind CSS", "Express"],
+      items: [
+        { name: "Next.js", level: 88, year: "2023" },
+        { name: "React", level: 90, year: "2022" },
+        { name: "Node.js", level: 82, year: "2022" },
+        { name: "Tailwind CSS", level: 88, year: "2022" },
+        { name: "Express", level: 74, year: "2022" },
+      ],
     },
     {
       id: "tools",
       label: "Tools",
-      items: ["Git", "Vercel", "PostgreSQL", "Figma", "REST APIs"],
+      items: [
+        { name: "Git", level: 86, year: "2021" },
+        { name: "Vercel", level: 84, year: "2023" },
+        { name: "PostgreSQL", level: 76, year: "2023" },
+        { name: "Figma", level: 80, year: "2021" },
+        { name: "REST APIs", level: 85, year: "2022" },
+      ],
     },
   ],
   timeline: [
@@ -198,6 +217,11 @@ export const defaultSite: SiteContent = {
     whatsappLabel: "WhatsApp",
     whatsappGreeting: "Usually replies within a few hours.",
     whatsappCta: "Start chat",
+    skillsKicker: "Stack",
+    skillsHeading: "Skills, graphed over time.",
+    skillsLevel: "Proficiency",
+    skillsYear: "Since",
+    skillsEmpty: "Add skills from the admin studio.",
     timelineKicker: "History",
     timelineHeading: "Web and design, year by year.",
     timelineWeb: "Web development",

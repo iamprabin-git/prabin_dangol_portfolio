@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { SiteCopy, TimelineItem, TimelineTrack } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 function yearValue(year: string) {
   const parsed = Number.parseInt(year, 10);
@@ -146,12 +147,14 @@ function TrackLane({
 export function HistoryGraph({
   items,
   copy,
+  className,
 }: {
   items: TimelineItem[];
   copy: Pick<
     SiteCopy,
     "timelineKicker" | "timelineHeading" | "timelineWeb" | "timelineDesign" | "timelineEmpty"
   >;
+  className?: string;
 }) {
   const [filter, setFilter] = useState<"all" | TimelineTrack>("all");
   const visible = items.filter((item) => filter === "all" || item.track === filter);
@@ -179,7 +182,7 @@ export function HistoryGraph({
   ];
 
   return (
-    <section id="history" className="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-20">
+    <section id="history" className={cn("mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-20", className)}>
       <div className="flex flex-wrap items-end justify-between gap-4 sm:gap-6">
         <div className="min-w-0">
           <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--accent)]">

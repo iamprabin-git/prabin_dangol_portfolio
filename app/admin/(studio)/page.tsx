@@ -48,7 +48,7 @@ export default async function AdminHomePage() {
       href: "/admin/skills",
       kicker: "04",
       title: "Skills",
-      body: `${skillCount} tags across ${site.skills.length} groups`,
+      body: `${skillCount} skills graphed across ${site.skills.length} groups`,
     },
     {
       href: "/admin/projects",

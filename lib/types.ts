@@ -53,10 +53,16 @@ export type ServiceItem = {
   body: string;
 };
 
+export type SkillItem = {
+  name: string;
+  level: number;
+  year: string;
+};
+
 export type SkillGroup = {
   id: string;
   label: string;
-  items: string[];
+  items: SkillItem[];
 };
 
 export type NavItem = {
@@ -116,6 +122,11 @@ export type SiteCopy = {
   whatsappLabel: string;
   whatsappGreeting: string;
   whatsappCta: string;
+  skillsKicker: string;
+  skillsHeading: string;
+  skillsLevel: string;
+  skillsYear: string;
+  skillsEmpty: string;
   timelineKicker: string;
   timelineHeading: string;
   timelineWeb: string;

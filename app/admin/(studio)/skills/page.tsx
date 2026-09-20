@@ -11,7 +11,7 @@ export default async function SkillsAdminPage() {
       <PageHeader
         eyebrow="Stack"
         title="Skills"
-        description="Groups and tags that roll across the home page marquee."
+        description="Groups with proficiency and year. They drive the home radar, rings, and practice timeline."
       />
       <div className="admin-card p-5 sm:p-8">
         <SkillsForm site={site} />

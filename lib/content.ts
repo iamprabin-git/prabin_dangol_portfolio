@@ -1,7 +1,8 @@
 import { defaultSite } from "./site";
 import { sanitizeAppearance } from "./appearance";
+import { sanitizeSkills, skillName } from "./skills";
 import { deleteStoredImage, readJsonRecord, saveImage, writeJsonRecord } from "./storage";
-import type { SiteContent, SocialLink } from "./types";
+import type { NavItem, SiteContent, SocialLink } from "./types";
 
 const SITE_KEY = "portfolio/site.json";
 const SITE_FILE = "site.json";
@@ -44,9 +45,9 @@ function mergeSite(base: SiteContent, extra: Partial<SiteContent> | null): SiteC
     }),
     about: extra.about ?? base.about,
     services: extra.services ?? base.services,
-    skills: extra.skills ?? base.skills,
+    skills: sanitizeSkills(extra.skills ?? base.skills),
     timeline: extra.timeline ?? base.timeline,
-    navigation: extra.navigation ?? base.navigation,
+    navigation: withSkillsNav(extra.navigation ?? base.navigation),
     socialLinks,
   };
 }
@@ -99,8 +100,16 @@ export async function updateSite(
   return saveSite(next);
 }
 
+function withSkillsNav(items: NavItem[]) {
+  if (items.some((item) => item.id === "skills" || item.href.includes("#skills"))) return items;
+  const next = [...items];
+  const about = next.findIndex((item) => item.id === "about");
+  next.splice(about >= 0 ? about + 1 : 0, 0, { id: "skills", label: "Skills", href: "/#skills" });
+  return next;
+}
+
 export function skillItems(site: SiteContent) {
-  return site.skills.flatMap((group) => group.items);
+  return sanitizeSkills(site.skills).flatMap((group) => group.items.map((item) => skillName(item)));
 }
 
 export function displayName(name: string) {

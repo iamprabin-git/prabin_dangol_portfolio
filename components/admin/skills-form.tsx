@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { inputClass, labelClass, submitSite } from "@/components/admin/form-utils";
+import { sanitizeSkills } from "@/lib/skills";
 import type { SkillGroup, SiteContent } from "@/lib/types";
 
 export function SkillsForm({ site }: { site: SiteContent }) {
@@ -10,7 +11,7 @@ export function SkillsForm({ site }: { site: SiteContent }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [groups, setGroups] = useState<SkillGroup[]>(site.skills);
+  const [groups, setGroups] = useState<SkillGroup[]>(() => sanitizeSkills(site.skills));
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   function addItem(groupId: string) {
@@ -18,8 +19,8 @@ export function SkillsForm({ site }: { site: SiteContent }) {
     if (!value) return;
     setGroups((current) =>
       current.map((group) =>
-        group.id === groupId && !group.items.includes(value)
-          ? { ...group, items: [...group.items, value] }
+        group.id === groupId && !group.items.some((item) => item.name === value)
+          ? { ...group, items: [...group.items, { name: value, level: 70, year: "" }] }
           : group,
       ),
     );
@@ -33,11 +34,13 @@ export function SkillsForm({ site }: { site: SiteContent }) {
     setMessage("");
     try {
       await submitSite({
-        skills: groups
-          .filter((group) => group.label.trim())
-          .map((group) => ({ ...group, label: group.label.trim() })),
+        skills: sanitizeSkills(
+          groups
+            .filter((group) => group.label.trim())
+            .map((group) => ({ ...group, label: group.label.trim() })),
+        ),
       });
-      setMessage("Skills saved. They appear in the home marquee immediately.");
+      setMessage("Skills saved. Graphs and rings on the home page update immediately.");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save.");
@@ -73,25 +76,73 @@ export function SkillsForm({ site }: { site: SiteContent }) {
               Remove group
             </button>
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 grid gap-3">
             {group.items.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() =>
-                  setGroups((current) =>
-                    current.map((entry) =>
-                      entry.id === group.id
-                        ? { ...entry, items: entry.items.filter((skill) => skill !== item) }
-                        : entry,
-                    ),
-                  )
-                }
-                className="rounded-full border border-[var(--line)] px-3 py-1 text-sm hover:border-[var(--accent-2)]"
-                title="Remove"
-              >
-                {item} ×
-              </button>
+              <div key={item.name} className="grid gap-2 rounded-lg border border-[var(--line)] p-3 sm:grid-cols-[1fr_8rem_6rem_auto] sm:items-center">
+                <p className="text-sm font-medium">{item.name}</p>
+                <label className="grid gap-1 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
+                  Level {item.level}
+                  <input
+                    type="range"
+                    min={1}
+                    max={100}
+                    value={item.level}
+                    onChange={(event) =>
+                      setGroups((current) =>
+                        current.map((entry) =>
+                          entry.id === group.id
+                            ? {
+                                ...entry,
+                                items: entry.items.map((skill) =>
+                                  skill.name === item.name
+                                    ? { ...skill, level: Number(event.target.value) }
+                                    : skill,
+                                ),
+                              }
+                            : entry,
+                        ),
+                      )
+                    }
+                  />
+                </label>
+                <input
+                  type="number"
+                  min={1990}
+                  max={2100}
+                  placeholder="Year"
+                  value={item.year}
+                  onChange={(event) =>
+                    setGroups((current) =>
+                      current.map((entry) =>
+                        entry.id === group.id
+                          ? {
+                              ...entry,
+                              items: entry.items.map((skill) =>
+                                skill.name === item.name ? { ...skill, year: event.target.value } : skill,
+                              ),
+                            }
+                          : entry,
+                      ),
+                    )
+                  }
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  className="text-sm text-[var(--accent-2)]"
+                  onClick={() =>
+                    setGroups((current) =>
+                      current.map((entry) =>
+                        entry.id === group.id
+                          ? { ...entry, items: entry.items.filter((skill) => skill.name !== item.name) }
+                          : entry,
+                      ),
+                    )
+                  }
+                >
+                  Remove
+                </button>
+              </div>
             ))}
           </div>
           <div className="mt-4 flex gap-2">
