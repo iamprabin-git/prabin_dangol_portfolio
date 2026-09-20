@@ -2,15 +2,21 @@ import { del, list, put } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
 import {
+  destroyCloudinaryImage,
+  hasCloudinary,
+  isCloudinaryUrl,
+  uploadImageFile,
+} from "./cloudinary";
+import {
   deleteFile,
   getRecord,
   hasDatabase,
-  mediaHref,
   mediaIdFromUrl,
-  putFile,
   setRecord,
 } from "./db";
 import type { Project } from "./types";
+
+export { hasCloudinary };
 
 const PROJECTS_BLOB = "portfolio/projects.json";
 const DATA_FILE = path.join(process.cwd(), "data", "projects.json");
@@ -40,10 +46,11 @@ export function canPersistWrites() {
 }
 
 export function storageLabel() {
-  if (hasDatabase()) return "Vercel Postgres";
+  if (hasDatabase() && hasCloudinary()) return "Neon + Cloudinary";
+  if (hasDatabase()) return "Neon (add Cloudinary for images)";
   if (hasBlobStore()) return "Vercel Blob";
   if (isVercel()) return "Read-only (enable Postgres to save)";
-  return "Local files";
+  return hasCloudinary() ? "Local + Cloudinary" : "Local files";
 }
 
 export async function readJsonRecord<T>(blobPath: string, fileName: string): Promise<T | null> {
@@ -138,28 +145,17 @@ export async function saveImage(file: File) {
     throw new Error("Images must be 4MB or smaller (Vercel Hobby request limit).");
   }
 
-  const filename = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}${extensionFor(file)}`;
-
-  if (hasDatabase()) {
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    await putFile(filename, file.type, bytes);
-    return mediaHref(filename);
-  }
-
-  if (hasBlobStore()) {
-    const blob = await put(`portfolio/uploads/${filename}`, file, {
-      access: "public",
-      addRandomSuffix: false,
-    });
-    return blob.url;
+  if (hasCloudinary()) {
+    return uploadImageFile(file);
   }
 
   if (isVercel()) {
     throw new Error(
-      "Uploads need Vercel Postgres. Create a Neon database in Storage and redeploy.",
+      "Set CLOUDINARY_URL in Vercel Environment Variables, then redeploy. Images are stored in Cloudinary; the database keeps only the URL.",
     );
   }
 
+  const filename = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}${extensionFor(file)}`;
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   const bytes = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes);
@@ -168,6 +164,11 @@ export async function saveImage(file: File) {
 
 export async function deleteStoredImage(imageUrl: string) {
   if (!imageUrl) return;
+
+  if (isCloudinaryUrl(imageUrl)) {
+    await destroyCloudinaryImage(imageUrl);
+    return;
+  }
 
   const mediaId = mediaIdFromUrl(imageUrl);
   if (mediaId) {

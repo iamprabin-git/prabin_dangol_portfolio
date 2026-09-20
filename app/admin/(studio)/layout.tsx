@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { getSite } from "@/lib/content";
 import { getReviews } from "@/lib/reviews";
-import { canPersistWrites, storageLabel } from "@/lib/storage";
+import { canPersistWrites, hasCloudinary, storageLabel } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +13,7 @@ export default async function StudioLayout({ children }: { children: ReactNode }
     <AdminShell
       storage={storageLabel()}
       writable={canPersistWrites()}
+      cloudinary={hasCloudinary()}
       site={site}
       pendingReviews={pendingReviews}
     >

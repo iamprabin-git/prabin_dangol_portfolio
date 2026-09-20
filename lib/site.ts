@@ -165,7 +165,7 @@ export const defaultSite: SiteContent = {
     projectsKicker: "Archive",
     projectsHeading: "All projects",
     projectsIntro:
-      "Work added from the admin dashboard shows up here immediately — including live uploads after you deploy to Vercel Blob.",
+      "Work added from the admin dashboard shows up here immediately — images live on Cloudinary, and the database keeps the URL.",
     projectsEmpty: "No projects yet. Add the first one from the admin studio.",
     footerCta: "Start a project",
     footerSitemap: "Sitemap",

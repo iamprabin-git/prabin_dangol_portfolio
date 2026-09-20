@@ -1,6 +1,6 @@
 import { defaultSite } from "./site";
 import { sanitizeAppearance } from "./appearance";
-import { readJsonRecord, saveImage, writeJsonRecord } from "./storage";
+import { deleteStoredImage, readJsonRecord, saveImage, writeJsonRecord } from "./storage";
 import type { SiteContent, SocialLink } from "./types";
 
 const SITE_KEY = "portfolio/site.json";
@@ -73,9 +73,15 @@ export async function updateSite(
 
   if (patch.portrait && patch.portrait.size > 0) {
     portrait = await saveImage(patch.portrait);
+    if (current.photos.portrait && current.photos.portrait !== portrait) {
+      await deleteStoredImage(current.photos.portrait);
+    }
   }
   if (patch.workspace && patch.workspace.size > 0) {
     workspace = await saveImage(patch.workspace);
+    if (current.photos.workspace && current.photos.workspace !== workspace) {
+      await deleteStoredImage(current.photos.workspace);
+    }
   }
 
   const { portrait: _p, workspace: _w, ...rest } = patch;

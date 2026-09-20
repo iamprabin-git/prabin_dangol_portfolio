@@ -121,12 +121,14 @@ export function AdminShell({
   site,
   storage,
   writable,
+  cloudinary,
   pendingReviews,
   children,
 }: {
   site: SiteContent;
   storage: string;
   writable: boolean;
+  cloudinary: boolean;
   pendingReviews: number;
   children: ReactNode;
 }) {
@@ -277,6 +279,12 @@ export function AdminShell({
           <div className="border-b border-[var(--accent-2)]/30 bg-[var(--accent-2)]/10 px-4 py-2.5 text-sm sm:px-8">
             Live saves need Vercel Postgres. In this project open Storage → Create Database → Neon,
             connect it, then redeploy.
+          </div>
+        ) : null}
+        {writable && !cloudinary ? (
+          <div className="border-b border-[var(--accent-2)]/30 bg-[var(--accent-2)]/10 px-4 py-2.5 text-sm sm:px-8">
+            Images upload to Cloudinary. Add <code>CLOUDINARY_URL</code> in Environment Variables,
+            then restart or redeploy. Neon will store only the image URL.
           </div>
         ) : null}
 
