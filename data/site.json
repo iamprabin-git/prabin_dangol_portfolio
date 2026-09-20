@@ -1,0 +1,280 @@
+{
+  "name": "Prabin Dangol",
+  "shortName": "PD",
+  "role": "Web Developer",
+  "headline": "I build web products that feel fast, clear, and a little stubborn about craft.",
+  "summary": "Frontend-leaning full-stack developer. I take interfaces from sketch to shipped — Next.js apps, design systems, and the APIs that keep them honest.",
+  "location": "Lalitpur, Nepal",
+  "email": "dprabin23@gmail.com",
+  "availability": "Available for freelance & full-time roles",
+  "resumeUrl": "/resume.pdf",
+  "photos": {
+    "portrait": "/uploads/1789844406003-3c3239f7.png",
+    "workspace": "/uploads/1789844406006-9a0d4871.png"
+  },
+  "social": {
+    "github": "https://github.com/prabindangol",
+    "linkedin": "https://www.linkedin.com/in/prabindangol",
+    "twitter": "https://x.com/prabindangol"
+  },
+  "socialLinks": [
+    {
+      "id": "github",
+      "label": "GitHub",
+      "href": "https://github.com/prabindangol"
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/prabindangol"
+    },
+    {
+      "id": "twitter",
+      "label": "Twitter",
+      "href": "https://x.com/prabindangol"
+    }
+  ],
+  "navigation": [
+    {
+      "id": "work",
+      "label": "Work",
+      "href": "/#work"
+    },
+    {
+      "id": "about",
+      "label": "About",
+      "href": "/#about"
+    },
+    {
+      "id": "history",
+      "label": "History",
+      "href": "/#history"
+    },
+    {
+      "id": "projects",
+      "label": "Projects",
+      "href": "/projects"
+    },
+    {
+      "id": "contact",
+      "label": "Contact",
+      "href": "/#contact"
+    }
+  ],
+  "about": [
+    "I work across the stack, but I care most about how a product feels in the hand: the first paint, the empty state, the moment a form actually works.",
+    "Lately that means Next.js, TypeScript, and calm backend systems — Postgres, auth, file uploads — deployed on Vercel without drama."
+  ],
+  "services": [
+    {
+      "id": "product-sites",
+      "title": "Product sites",
+      "body": "Marketing pages and portfolios that load quickly and look considered on every screen."
+    },
+    {
+      "id": "web-apps",
+      "title": "Web applications",
+      "body": "Dashboards, CRMs, and tools with real data, real auth, and interfaces people can live in."
+    },
+    {
+      "id": "frontend-systems",
+      "title": "Frontend systems",
+      "body": "Reusable UI, design tokens, and component libraries that keep a product consistent as it grows."
+    }
+  ],
+  "skills": [
+    {
+      "id": "languages",
+      "label": "Languages",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "SQL"
+      ]
+    },
+    {
+      "id": "frameworks",
+      "label": "Frameworks",
+      "items": [
+        "Next.js",
+        "React",
+        "Node.js",
+        "Tailwind CSS",
+        "Express"
+      ]
+    },
+    {
+      "id": "tools",
+      "label": "Tools",
+      "items": [
+        "Git",
+        "Vercel",
+        "PostgreSQL",
+        "Figma",
+        "REST APIs"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "tl-2021-design",
+      "year": "2021",
+      "title": "Brand systems for local shops",
+      "body": "Logos, type, and print kits that had to hold up on a bag, a sign, and a phone screen.",
+      "track": "design"
+    },
+    {
+      "id": "tl-2021-web",
+      "year": "2021",
+      "title": "First freelance product sites",
+      "body": "WordPress and custom HTML/CSS sites shipped for small businesses in Kathmandu.",
+      "track": "web"
+    },
+    {
+      "id": "tl-2022-design",
+      "year": "2022",
+      "title": "Cafe identity and packaging",
+      "body": "A full visual language — menus, cups, and social — built around one mark.",
+      "track": "design"
+    },
+    {
+      "id": "tl-2022-web",
+      "year": "2022",
+      "title": "React marketing sites",
+      "body": "Component-driven landing pages with real CMS content and careful motion.",
+      "track": "web"
+    },
+    {
+      "id": "tl-2023-design",
+      "year": "2023",
+      "title": "Festival campaign art",
+      "body": "Posters, motion frames, and a color system used across print and digital.",
+      "track": "design"
+    },
+    {
+      "id": "tl-2023-web",
+      "year": "2023",
+      "title": "SaaS dashboard UI",
+      "body": "A design-system-backed Next.js interface for filters, empty states, and charts.",
+      "track": "web"
+    },
+    {
+      "id": "tl-2024-design",
+      "year": "2024",
+      "title": "Editorial layouts and social kits",
+      "body": "Repeatable templates so a team could publish without losing the brand.",
+      "track": "design"
+    },
+    {
+      "id": "tl-2024-web",
+      "year": "2024",
+      "title": "Atlas Stay booking interface",
+      "body": "Maps, dates, and rooms treated as one continuous gesture.",
+      "track": "web"
+    },
+    {
+      "id": "tl-2025-design",
+      "year": "2025",
+      "title": "Poster and motion series",
+      "body": "A graphic sequence for a product launch — stills first, then short loops.",
+      "track": "design"
+    },
+    {
+      "id": "tl-2025-web",
+      "year": "2025",
+      "title": "Lumen Analytics",
+      "body": "A metrics product with streamed charts and role-aware views.",
+      "track": "web"
+    },
+    {
+      "id": "tl-2026-web",
+      "year": "2026",
+      "title": "Northstar Commerce",
+      "body": "Headless storefront, editorial product pages, and a calm checkout.",
+      "track": "web"
+    }
+  ],
+  "copy": {
+    "brandTag": "Portfolio",
+    "headerCta": "Let’s talk",
+    "heroPrimaryCta": "See selected work",
+    "heroSecondaryCta": "Get in touch",
+    "workKicker": "Selected work",
+    "workHeading": "Projects, not placeholders.",
+    "workAllLink": "All projects",
+    "aboutKicker": "About",
+    "aboutHeading": "{role} based in {location}.",
+    "contactKicker": "Contact",
+    "contactHeading": "Tell me what you want to ship.",
+    "projectsKicker": "Archive",
+    "projectsHeading": "All projects",
+    "projectsIntro": "Work added from the admin dashboard shows up here immediately — including live uploads after you deploy to Vercel Blob.",
+    "projectsEmpty": "No projects yet. Add the first one from the admin studio.",
+    "footerCta": "Start a project",
+    "footerSitemap": "Sitemap",
+    "footerSocial": "Elsewhere",
+    "footerStatus": "Status",
+    "footerNote": "Built with Next.js",
+    "formName": "Name",
+    "formEmail": "Email",
+    "formMessage": "Message",
+    "formSubmit": "Send a note",
+    "formSuccess": "Your email app should open with the message ready to send.",
+    "visitSite": "Visit site",
+    "caseStudy": "Case study",
+    "sourceLabel": "Source",
+    "liveSite": "Open live site",
+    "moreWork": "More work",
+    "backToProjects": "All projects",
+    "reviewsKicker": "Reviews",
+    "reviewsHeading": "What people said",
+    "reviewsEmpty": "No published reviews yet.",
+    "reviewFormHeading": "Leave a review",
+    "reviewFormName": "Name",
+    "reviewFormRole": "Role or company",
+    "reviewFormRating": "Rating",
+    "reviewFormBody": "Your review",
+    "reviewFormSubmit": "Submit review",
+    "reviewFormSuccess": "Thanks. Your review will appear after it is approved.",
+    "whatsappLabel": "WhatsApp",
+    "whatsappGreeting": "Usually replies within a few hours.",
+    "whatsappCta": "Start chat",
+    "timelineKicker": "History",
+    "timelineHeading": "Web and design, year by year.",
+    "timelineWeb": "Web development",
+    "timelineDesign": "Graphic design",
+    "timelineEmpty": "Add completed work from the admin studio."
+  },
+  "whatsapp": {
+    "phone": "9779765726294",
+    "message": "Hi {name}, I saw your portfolio and would like to talk about a project.",
+    "enabled": true
+  },
+  "appearance": {
+    "fontSize": "md",
+    "fontSans": "poppins",
+    "fontDisplay": "syne",
+    "fontMono": "ibm-plex",
+    "radius": "sharp",
+    "dark": {
+      "bg": "#07080b",
+      "bgSoft": "#101218",
+      "bgPanel": "#16181f",
+      "text": "#f3f1ea",
+      "muted": "#9a9c96",
+      "accent": "#c6f135",
+      "accent2": "#ff7a45"
+    },
+    "light": {
+      "bg": "#f3efe6",
+      "bgSoft": "#e8e2d6",
+      "bgPanel": "#fffcf7",
+      "text": "#16140f",
+      "muted": "#6a655b",
+      "accent": "#4f6d00",
+      "accent2": "#c2471d"
+    }
+  }
+}

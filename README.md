@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prabin Dangol — Web Developer Portfolio
 
-## Getting Started
+Personal Next.js portfolio with a private admin studio so you can upload, edit, and delete projects without a rebuild. Deploys on Vercel’s free Hobby plan.
 
-First, run the development server:
+## What you get
+
+- Public site: home, project archive, project pages, contact
+- Admin at `/admin`: password-protected project uploads (image, write-up, tags, live/GitHub links)
+- Local storage while you develop (`data/projects.json` + `public/uploads`)
+- Vercel Blob on production so uploads survive serverless deploys
+
+Edit your name, bio, email, and social links in [`lib/site.ts`](lib/site.ts).
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Password in development: `admin` (or whatever you set in `.env.local`)
+- Copy `.env.example` to `.env.local` to change it
 
-## Learn More
+## Deploy to Vercel (free)
 
-To learn more about Next.js, take a look at the following resources:
+1. Push this repo to GitHub.
+2. Go to [vercel.com/new](https://vercel.com/new), import the repo, and deploy. Next.js is detected automatically.
+3. In the project: **Settings → Environment Variables**
+   - `ADMIN_PASSWORD` — the password you will use at `/admin`
+   - `AUTH_SECRET` — any long random string
+4. Enable persistent uploads:
+   - Open **Storage → Create Database → Blob**
+   - Create a **public** Blob store and connect it to this project (Production + Preview + Development)
+   - Vercel adds `BLOB_READ_WRITE_TOKEN` (and OIDC vars) for you
+5. Redeploy so the new variables are picked up.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Until Blob is connected, the live site still shows the seed projects, but new uploads cannot be saved (Vercel’s filesystem is read-only).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Daily use
 
-## Deploy on Vercel
+1. Visit `https://your-domain.vercel.app/admin`
+2. Sign in with `ADMIN_PASSWORD`
+3. **Upload project**, add a cover image (JPG/PNG/WebP/GIF/SVG, max 4MB), and publish
+4. Featured projects appear on the home page; all projects appear at `/projects`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Cover images on the Hobby plan must stay under 4MB (serverless request limit).
+- Change placeholder GitHub/LinkedIn/email values in `lib/site.ts` before sharing the site.
+- Seed work lives in `data/projects.json`. After the first successful admin save on Vercel, Blob becomes the source of truth.
