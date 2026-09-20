@@ -27,7 +27,7 @@ export function WhatsAppWidget({ site }: { site: SiteContent }) {
   }
 
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex flex-col items-end gap-3">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-30 flex flex-col items-end gap-3">
       {open ? (
         <div className="w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--bg-panel)] shadow-[var(--header-shadow)]">
           <div className="flex items-center gap-3 bg-[#075e54] px-4 py-3 text-white">
