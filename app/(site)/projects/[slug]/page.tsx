@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CoverImage } from "@/components/project-card";
+import { ProjectWorkGrid } from "@/components/project-work-swiper";
 import { ReviewForm, ReviewList } from "@/components/review-section";
 import { Stars } from "@/components/stars";
 import { getSite } from "@/lib/content";
 import { getProjectBySlug, getProjects } from "@/lib/projects";
-import { averageRating, getApprovedReviews } from "@/lib/reviews";
+import { averageRating, getApprovedReviews, getReviewStats } from "@/lib/reviews";
 import { displayHost } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -31,9 +32,10 @@ export default async function ProjectDetailPage({
   const [site, project] = await Promise.all([getSite(), getProjectBySlug(slug)]);
   if (!project) notFound();
 
-  const [others, reviews] = await Promise.all([
-    getProjects().then((items) => items.filter((item) => item.id !== project.id).slice(0, 2)),
+  const [others, reviews, stats] = await Promise.all([
+    getProjects().then((items) => items.filter((item) => item.id !== project.id)),
     getApprovedReviews(project.id),
+    getReviewStats(),
   ]);
   const rating = averageRating(reviews);
 
@@ -110,38 +112,16 @@ export default async function ProjectDetailPage({
       {others.length ? (
         <div className="mt-20 border-t border-[var(--line)] pt-10">
           <h2 className="font-display text-3xl font-bold">{site.copy.moreWork}</h2>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {others.map((item) => (
-              <div key={item.id} className="group">
-                <a
-                  href={item.liveUrl || `/projects/${item.slug}`}
-                  target={item.liveUrl ? "_blank" : undefined}
-                  rel={item.liveUrl ? "noreferrer" : undefined}
-                  className="block aspect-[16/10] overflow-hidden rounded-sm bg-[var(--bg-panel)]"
-                >
-                  <CoverImage
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="transition duration-500 group-hover:scale-[1.03]"
-                  />
-                </a>
-                <h3 className="mt-4 font-display text-2xl font-bold">
-                  <Link href={`/projects/${item.slug}`} className="hover:text-[var(--accent)]">
-                    {item.title}
-                  </Link>
-                </h3>
-                {item.liveUrl ? (
-                  <a
-                    href={item.liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-1 inline-block text-sm text-[var(--muted)] hover:text-[var(--accent)]"
-                  >
-                    {displayHost(item.liveUrl)} ↗
-                  </a>
-                ) : null}
-              </div>
-            ))}
+          <div className="mt-6">
+            <ProjectWorkGrid
+              projects={others}
+              labels={{
+                visitSite: site.copy.visitSite,
+                caseStudy: site.copy.caseStudy,
+                sourceLabel: site.copy.sourceLabel,
+              }}
+              ratings={stats}
+            />
           </div>
         </div>
       ) : null}

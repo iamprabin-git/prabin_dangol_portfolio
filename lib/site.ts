@@ -31,7 +31,7 @@ export const defaultSite: SiteContent = {
   navigation: [
     { id: "work", label: "Work", href: "/#work" },
     { id: "about", label: "About", href: "/#about" },
-    { id: "skills", label: "Skills", href: "/#skills" },
+    { id: "skills", label: "Skills", href: "/skills" },
     { id: "history", label: "History", href: "/#history" },
     { id: "projects", label: "Projects", href: "/projects" },
     { id: "contact", label: "Contact", href: "/#contact" },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { HistoryGraph } from "@/components/history-graph";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectWorkSwiper } from "@/components/project-work-swiper";
 import { SkillsSection } from "@/components/skills-section";
 import { WhatsAppButton } from "@/components/whatsapp-widget";
 import { displayName, getSite, skillItems } from "@/lib/content";
@@ -114,16 +114,8 @@ export default async function HomePage() {
             {site.copy.workAllLink}
           </Link>
         </div>
-        <div className="mt-6">
-          {work.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              labels={labels}
-              rating={stats[project.id]}
-            />
-          ))}
+        <div className="mt-8">
+          <ProjectWorkSwiper projects={work} labels={labels} ratings={stats} />
         </div>
       </section>
 
@@ -167,6 +159,7 @@ export default async function HomePage() {
         <SkillsSection
           groups={sanitizeSkills(site.skills)}
           timeline={history}
+          preview
           copy={{
             skillsKicker: site.copy.skillsKicker,
             skillsHeading: site.copy.skillsHeading,

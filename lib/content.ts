@@ -101,10 +101,15 @@ export async function updateSite(
 }
 
 function withSkillsNav(items: NavItem[]) {
-  if (items.some((item) => item.id === "skills" || item.href.includes("#skills"))) return items;
-  const next = [...items];
+  const mapped = items.map((item) =>
+    item.id === "skills" || item.href.includes("#skills")
+      ? { ...item, id: "skills", href: "/skills" }
+      : item,
+  );
+  if (mapped.some((item) => item.id === "skills" || item.href === "/skills")) return mapped;
+  const next = [...mapped];
   const about = next.findIndex((item) => item.id === "about");
-  next.splice(about >= 0 ? about + 1 : 0, 0, { id: "skills", label: "Skills", href: "/#skills" });
+  next.splice(about >= 0 ? about + 1 : 0, 0, { id: "skills", label: "Skills", href: "/skills" });
   return next;
 }
 

@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ForwardSwiper, pagesOf, useMedia } from "@/components/forward-swiper";
 import { groupAverage, skillYearValue } from "@/lib/skills";
 import type { SiteCopy, SkillGroup, SkillItem, TimelineItem } from "@/lib/types";
 
@@ -166,14 +168,15 @@ export function SkillsSection({
   groups,
   timeline,
   copy,
+  preview = false,
 }: {
   groups: SkillGroup[];
   timeline: TimelineItem[];
   copy: Pick<SiteCopy, "skillsKicker" | "skillsHeading" | "skillsLevel" | "skillsYear" | "skillsEmpty">;
+  preview?: boolean;
 }) {
   const { ref, visible } = useInView<HTMLElement>();
-  const [activeId, setActiveId] = useState(groups[0]?.id || "");
-  const active = groups.find((group) => group.id === activeId) || groups[0];
+  const perView = useMedia("(min-width: 768px)", 2, 1, 1);
   const averages = useMemo(
     () => groups.map((group) => ({ label: group.label, value: groupAverage(group) })),
     [groups],
@@ -181,6 +184,7 @@ export function SkillsSection({
   const allItems = groups.flatMap((group) => group.items);
   const years = timeline.map((item) => Number.parseInt(item.year, 10)).filter((year) => Number.isFinite(year));
   const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : "—";
+  const skillPages = pagesOf(allItems, perView);
 
   if (!groups.length || !allItems.length) {
     return (
@@ -201,74 +205,90 @@ export function SkillsSection({
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--accent)]">{copy.skillsKicker}</p>
             <h2 className="mt-3 break-words font-display text-3xl font-extrabold sm:text-5xl">{copy.skillsHeading}</h2>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {[
-              { label: "Skills", value: String(allItems.length) },
-              { label: "Groups", value: String(groups.length) },
-              { label: "Years", value: span },
-            ].map((stat) => (
-              <p
-                key={stat.label}
-                className="rounded-full border border-[var(--line)] bg-[var(--bg-panel)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]"
-              >
-                <span className="text-[var(--text)]">{stat.value}</span> {stat.label}
-              </p>
-            ))}
-          </div>
+          {preview ? (
+            <Link href="/skills" className="text-sm text-[var(--muted)] hover:text-[var(--text)]">
+              All skills
+            </Link>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {[
+                { label: "Skills", value: String(allItems.length) },
+                { label: "Groups", value: String(groups.length) },
+                { label: "Years", value: span },
+              ].map((stat) => (
+                <p
+                  key={stat.label}
+                  className="rounded-full border border-[var(--line)] bg-[var(--bg-panel)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]"
+                >
+                  <span className="text-[var(--text)]">{stat.value}</span> {stat.label}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-center">
-          <div className="lg:col-span-5">
-            <RadarChart groups={averages} />
+        {preview ? (
+          <div className="mt-8">
+            <ForwardSwiper
+              label="Skill slides"
+              intervalMs={4000}
+              slides={skillPages.map((group, index) => (
+                <div
+                  key={`skill-${index}`}
+                  className="grid gap-3 px-px sm:gap-4"
+                  style={{ gridTemplateColumns: `repeat(${perView}, minmax(0, 1fr))` }}
+                >
+                  {group.map((item) => (
+                    <SkillRing key={`${item.name}-${index}`} item={item} active={visible} yearLabel={copy.skillsYear} />
+                  ))}
+                </div>
+              ))}
+            />
           </div>
-          <div className="grid gap-4 lg:col-span-7">
-            {averages.map((group) => (
-              <div key={group.label}>
-                <div className="mb-2 flex items-baseline justify-between gap-3">
-                  <p className="font-medium">{group.label}</p>
-                  <p className="font-mono text-xs text-[var(--muted)]">
-                    {copy.skillsLevel} {group.value}
-                  </p>
-                </div>
-                <div className="h-2 overflow-hidden rounded-full bg-[var(--bg-panel)]">
-                  <span
-                    className="block h-full origin-left rounded-full bg-[var(--accent)] transition-transform duration-700 ease-out"
-                    style={{ transform: `scaleX(${visible ? group.value / 100 : 0})` }}
-                  />
-                </div>
+        ) : (
+          <>
+            <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-center">
+              <div className="lg:col-span-5">
+                <RadarChart groups={averages} />
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="grid gap-4 lg:col-span-7">
+                {averages.map((group) => (
+                  <div key={group.label}>
+                    <div className="mb-2 flex items-baseline justify-between gap-3">
+                      <p className="font-medium">{group.label}</p>
+                      <p className="font-mono text-xs text-[var(--muted)]">
+                        {copy.skillsLevel} {group.value}
+                      </p>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-[var(--bg-panel)]">
+                      <span
+                        className="block h-full origin-left rounded-full bg-[var(--accent)] transition-transform duration-700 ease-out"
+                        style={{ transform: `scaleX(${visible ? group.value / 100 : 0})` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-        <div className="mt-10 flex flex-wrap gap-2">
-          {groups.map((group) => (
-            <button
-              key={group.id}
-              type="button"
-              onClick={() => setActiveId(group.id)}
-              className={
-                active?.id === group.id
-                  ? "rounded-full bg-[var(--accent)] px-3 py-1.5 text-[11px] font-semibold text-[var(--on-accent)]"
-                  : "rounded-full border border-[var(--line)] px-3 py-1.5 text-[11px] text-[var(--muted)]"
-              }
-            >
-              {group.label}
-            </button>
-          ))}
-        </div>
+            <div className="mt-10 grid gap-10">
+              {groups.map((group) => (
+                <div key={group.id}>
+                  <h3 className="font-display text-xl font-bold sm:text-2xl">{group.label}</h3>
+                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                    {group.items.map((item) => (
+                      <SkillRing key={item.name} item={item} active={visible} yearLabel={copy.skillsYear} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-        {active ? (
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {active.items.map((item) => (
-              <SkillRing key={item.name} item={item} active={visible} yearLabel={copy.skillsYear} />
-            ))}
-          </div>
-        ) : null}
-
-        <div className="mt-10">
-          <PracticeTimeline items={allItems} />
-        </div>
+            <div className="mt-10">
+              <PracticeTimeline items={allItems} />
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

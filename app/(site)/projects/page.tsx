@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectWorkGrid } from "@/components/project-work-swiper";
 import { getSite } from "@/lib/content";
 import { getProjects } from "@/lib/projects";
 import { getReviewStats } from "@/lib/reviews";
@@ -28,25 +28,16 @@ export default async function ProjectsPage() {
       </h1>
       <p className="mt-4 max-w-xl text-[var(--muted)]">{site.copy.projectsIntro}</p>
       <div className="mt-8">
-        {projects.length ? (
-          projects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              labels={{
-                visitSite: site.copy.visitSite,
-                caseStudy: site.copy.caseStudy,
-                sourceLabel: site.copy.sourceLabel,
-              }}
-              rating={stats[project.id]}
-            />
-          ))
-        ) : (
-          <p className="border-t border-[var(--line)] py-16 text-[var(--muted)]">
-            {site.copy.projectsEmpty}
-          </p>
-        )}
+        <ProjectWorkGrid
+          projects={projects}
+          labels={{
+            visitSite: site.copy.visitSite,
+            caseStudy: site.copy.caseStudy,
+            sourceLabel: site.copy.sourceLabel,
+          }}
+          ratings={stats}
+          empty={site.copy.projectsEmpty}
+        />
       </div>
     </div>
   );
