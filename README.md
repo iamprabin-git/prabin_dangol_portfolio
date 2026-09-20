@@ -6,8 +6,8 @@ Personal Next.js portfolio with a private admin studio so you can upload, edit, 
 
 - Public site: home, project archive, project pages, contact
 - Admin at `/admin`: password-protected project uploads (image, write-up, tags, live/GitHub links)
-- Local storage while you develop (`data/projects.json` + `public/uploads`)
-- Vercel Blob on production so uploads survive serverless deploys
+- Local storage while you develop (`data/*.json` + `public/uploads`)
+- Vercel Postgres (Neon, free Hobby) on production so site copy, projects, reviews, and images persist
 
 Edit your name, bio, email, and social links in [`lib/site.ts`](lib/site.ts).
 
@@ -32,13 +32,13 @@ Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 3. In the project: **Settings → Environment Variables**
    - `ADMIN_PASSWORD` — the password you will use at `/admin`
    - `AUTH_SECRET` — any long random string
-4. Enable persistent uploads:
-   - Open **Storage → Create Database → Blob**
-   - Create a **public** Blob store and connect it to this project (Production + Preview + Development)
-   - Vercel adds `BLOB_READ_WRITE_TOKEN` (and OIDC vars) for you
+4. Enable the free database:
+   - Open **Storage → Create Database → Neon** (Vercel Postgres)
+   - Create it on the Hobby plan and connect it to this project (Production + Preview + Development)
+   - Vercel adds `DATABASE_URL` / `POSTGRES_URL` for you
 5. Redeploy so the new variables are picked up.
 
-Until Blob is connected, the live site still shows the seed projects, but new uploads cannot be saved (Vercel’s filesystem is read-only).
+Until Postgres is connected, the live site still shows the seed projects, but new admin saves cannot be stored (Vercel’s filesystem is read-only).
 
 ## Daily use
 
@@ -51,4 +51,4 @@ Until Blob is connected, the live site still shows the seed projects, but new up
 
 - Cover images on the Hobby plan must stay under 4MB (serverless request limit).
 - Change placeholder GitHub/LinkedIn/email values in `lib/site.ts` before sharing the site.
-- Seed work lives in `data/projects.json`. After the first successful admin save on Vercel, Blob becomes the source of truth.
+- Seed work lives in `data/projects.json`. After the first successful admin save on Vercel, Postgres becomes the source of truth.

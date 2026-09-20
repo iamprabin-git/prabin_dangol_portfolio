@@ -275,7 +275,8 @@ export function AdminShell({
 
         {!writable ? (
           <div className="border-b border-[var(--accent-2)]/30 bg-[var(--accent-2)]/10 px-4 py-2.5 text-sm sm:px-8">
-            Live uploads need a Vercel Blob store. Create one in Storage, then redeploy.
+            Live saves need Vercel Postgres. In this project open Storage → Create Database → Neon,
+            connect it, then redeploy.
           </div>
         ) : null}
 

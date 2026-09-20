@@ -1,6 +1,7 @@
 import { get, put } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
+import { getRecord, hasDatabase, setRecord } from "./db";
 import { getAdminPassword } from "./auth";
 import { hasBlobStore, isVercel } from "./storage";
 
@@ -55,6 +56,11 @@ async function streamToText(stream: ReadableStream<Uint8Array> | null) {
 }
 
 export async function getStoredAuth(): Promise<StoredAuth | null> {
+  if (hasDatabase()) {
+    const fromDb = await getRecord<StoredAuth>(AUTH_BLOB);
+    if (fromDb) return fromDb;
+  }
+
   if (hasBlobStore()) {
     try {
       const result = await get(AUTH_BLOB, { access: "private", useCache: false });
@@ -76,9 +82,9 @@ export async function getStoredAuth(): Promise<StoredAuth | null> {
 }
 
 export async function saveAdminPassword(password: string) {
-  if (isVercel() && !hasBlobStore()) {
+  if (isVercel() && !hasDatabase() && !hasBlobStore()) {
     throw new Error(
-      "This host cannot store a new password. Set ADMIN_PASSWORD in Vercel environment variables and redeploy.",
+      "This host cannot store a new password. Connect Vercel Postgres (Neon) or set ADMIN_PASSWORD and redeploy.",
     );
   }
 
@@ -89,6 +95,11 @@ export async function saveAdminPassword(password: string) {
     updatedAt: new Date().toISOString(),
   };
   const payload = JSON.stringify(record, null, 2);
+
+  if (hasDatabase()) {
+    await setRecord(AUTH_BLOB, record);
+    return;
+  }
 
   if (hasBlobStore()) {
     await put(AUTH_BLOB, payload, {

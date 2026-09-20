@@ -1,6 +1,15 @@
 import { del, list, put } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
+import {
+  deleteFile,
+  getRecord,
+  hasDatabase,
+  mediaHref,
+  mediaIdFromUrl,
+  putFile,
+  setRecord,
+} from "./db";
 import type { Project } from "./types";
 
 const PROJECTS_BLOB = "portfolio/projects.json";
@@ -27,16 +36,22 @@ export function isVercel() {
 }
 
 export function canPersistWrites() {
-  return hasBlobStore() || !isVercel();
+  return hasDatabase() || hasBlobStore() || !isVercel();
 }
 
 export function storageLabel() {
+  if (hasDatabase()) return "Vercel Postgres";
   if (hasBlobStore()) return "Vercel Blob";
-  if (isVercel()) return "Read-only (enable Blob to upload)";
+  if (isVercel()) return "Read-only (enable Postgres to save)";
   return "Local files";
 }
 
 export async function readJsonRecord<T>(blobPath: string, fileName: string): Promise<T | null> {
+  if (hasDatabase()) {
+    const fromDb = await getRecord<T>(blobPath);
+    if (fromDb) return fromDb;
+  }
+
   if (hasBlobStore()) {
     const { blobs } = await list({ prefix: blobPath, limit: 20 });
     const file = blobs.find(
@@ -59,8 +74,13 @@ export async function readJsonRecord<T>(blobPath: string, fileName: string): Pro
 export async function writeJsonRecord<T>(blobPath: string, fileName: string, value: T) {
   if (!canPersistWrites()) {
     throw new Error(
-      "Uploads need Vercel Blob. Create a Blob store in the Vercel dashboard and redeploy.",
+      "Saves need Vercel Postgres. In the project, open Storage → Create Database → Neon, connect it, and redeploy.",
     );
+  }
+
+  if (hasDatabase()) {
+    await setRecord(blobPath, value);
+    return;
   }
 
   const payload = JSON.stringify(value, null, 2);
@@ -120,6 +140,12 @@ export async function saveImage(file: File) {
 
   const filename = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}${extensionFor(file)}`;
 
+  if (hasDatabase()) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    await putFile(filename, file.type, bytes);
+    return mediaHref(filename);
+  }
+
   if (hasBlobStore()) {
     const blob = await put(`portfolio/uploads/${filename}`, file, {
       access: "public",
@@ -130,7 +156,7 @@ export async function saveImage(file: File) {
 
   if (isVercel()) {
     throw new Error(
-      "Uploads need Vercel Blob. Create a Blob store in the Vercel dashboard and redeploy.",
+      "Uploads need Vercel Postgres. Create a Neon database in Storage and redeploy.",
     );
   }
 
@@ -142,6 +168,16 @@ export async function saveImage(file: File) {
 
 export async function deleteStoredImage(imageUrl: string) {
   if (!imageUrl) return;
+
+  const mediaId = mediaIdFromUrl(imageUrl);
+  if (mediaId) {
+    try {
+      await deleteFile(mediaId);
+    } catch {
+      // Ignore missing database files.
+    }
+    return;
+  }
 
   if (hasBlobStore() && imageUrl.includes("blob.vercel-storage.com")) {
     try {
