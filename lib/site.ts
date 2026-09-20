@@ -226,7 +226,8 @@ export const defaultSite: SiteContent = {
     timelineHeading: "Web and design, year by year.",
     timelineWeb: "Web development",
     timelineDesign: "Graphic design",
-    timelineEmpty: "Add completed work from the admin studio.",
+    timelineEmpty: "Add skill years and project completion years to build this graph.",
+    logosKicker: "Project marks",
   },
   whatsapp: {
     phone: "",

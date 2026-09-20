@@ -59,6 +59,7 @@ const COPY_FIELDS: Array<{ name: keyof SiteCopy; label: string; rows?: number; h
   { name: "timelineWeb", label: "Web track name" },
   { name: "timelineDesign", label: "Design track name" },
   { name: "timelineEmpty", label: "Empty timeline message" },
+  { name: "logosKicker", label: "Footer logo strip label" },
 ];
 
 function copyFromForm(form: FormData, current: SiteCopy): SiteCopy {

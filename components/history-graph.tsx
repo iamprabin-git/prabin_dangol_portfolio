@@ -253,6 +253,8 @@ export function HistoryGraph({
                         className="font-mono text-[10px] uppercase tracking-[0.2em]"
                         style={{ color: entry.track === "web" ? "var(--accent)" : "var(--accent-2)" }}
                       >
+                        {entry.source === "project" ? "Project" : "Skill"}
+                        {" · "}
                         {entry.track === "web" ? copy.timelineWeb : copy.timelineDesign}
                       </p>
                       <h3 className="mt-2 font-display text-2xl font-bold">{entry.title}</h3>

@@ -46,12 +46,13 @@ export function ProjectForm({ project }: { project?: Project }) {
       </label>
       <div className="grid gap-5 sm:grid-cols-2">
         <label className={labelClass}>
-          Year
-          <input
-            name="year"
-            defaultValue={project?.year || String(new Date().getFullYear())}
-            className={inputClass}
-          />
+            Year completed
+            <input
+              name="year"
+              required
+              defaultValue={project?.year || String(new Date().getFullYear())}
+              className={inputClass}
+            />
         </label>
         <label className={labelClass}>
           Tags (comma separated)

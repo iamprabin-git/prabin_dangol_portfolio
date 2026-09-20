@@ -11,7 +11,7 @@ const links = [
   { href: "/admin", label: "Overview", hint: "Dashboard" },
   { href: "/admin/profile", label: "Profile", hint: "Identity" },
   { href: "/admin/about", label: "About", hint: "Story" },
-  { href: "/admin/timeline", label: "Timeline", hint: "Years" },
+  { href: "/admin/timeline", label: "Timeline", hint: "Auto" },
   { href: "/admin/skills", label: "Skills", hint: "Stack" },
   { href: "/admin/projects", label: "Projects", hint: "Work" },
   { href: "/admin/reviews", label: "Reviews", hint: "Notes" },

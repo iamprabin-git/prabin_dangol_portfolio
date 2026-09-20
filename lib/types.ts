@@ -132,6 +132,7 @@ export type SiteCopy = {
   timelineWeb: string;
   timelineDesign: string;
   timelineEmpty: string;
+  logosKicker: string;
 };
 
 export type TimelineTrack = "web" | "design";
@@ -142,6 +143,7 @@ export type TimelineItem = {
   title: string;
   body: string;
   track: TimelineTrack;
+  source?: "skill" | "project";
 };
 
 export type WhatsAppSettings = {

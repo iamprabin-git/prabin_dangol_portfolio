@@ -40,7 +40,7 @@ export function SkillsForm({ site }: { site: SiteContent }) {
             .map((group) => ({ ...group, label: group.label.trim() })),
         ),
       });
-      setMessage("Skills saved. Graphs and rings on the home page update immediately.");
+      setMessage("Skills saved. Graphs and the history timeline update immediately.");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save.");

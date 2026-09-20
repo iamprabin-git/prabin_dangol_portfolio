@@ -13,7 +13,7 @@ export function Footer({ site }: { site: SiteContent }) {
   );
 
   return (
-    <footer className="mt-auto border-t border-[var(--line)] bg-[var(--bg-soft)]">
+    <footer className="border-t border-[var(--line)] bg-[var(--bg-soft)]">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
         <div className="flex flex-col gap-4 border-b border-[var(--line)] pb-8 sm:flex-row sm:items-end sm:justify-between sm:pb-10">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">

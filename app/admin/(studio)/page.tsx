@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/admin/page-header";
 import { getSite, skillItems } from "@/lib/content";
 import { getProjects } from "@/lib/projects";
 import { getReviews } from "@/lib/reviews";
+import { buildHistory } from "@/lib/history";
 
 export const metadata = { title: "Admin" };
 
@@ -15,6 +16,7 @@ export default async function AdminHomePage() {
   ]);
   const skillCount = skillItems(site).length;
   const featured = projects.filter((project) => project.featured).length;
+  const historyCount = buildHistory(site.skills, projects).length;
   const pendingReviews = reviews.filter((review) => review.status === "pending").length;
   const liveReviews = reviews.filter((review) => review.status === "approved").length;
 
@@ -42,7 +44,7 @@ export default async function AdminHomePage() {
       href: "/admin/timeline",
       kicker: "03",
       title: "Timeline",
-      body: `${site.timeline.length} completed entries on the history graph`,
+      body: `${historyCount} auto entries from skill years and project dates`,
     },
     {
       href: "/admin/skills",

@@ -7,7 +7,8 @@ import { WhatsAppButton } from "@/components/whatsapp-widget";
 import { displayName, getSite, skillItems } from "@/lib/content";
 import { sanitizeSkills } from "@/lib/skills";
 import { interpolate, navHref } from "@/lib/copy";
-import { getFeaturedProjects } from "@/lib/projects";
+import { getProjects } from "@/lib/projects";
+import { buildHistory } from "@/lib/history";
 import { getReviewStats } from "@/lib/reviews";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +16,12 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const [site, projects, stats] = await Promise.all([
     getSite(),
-    getFeaturedProjects(),
+    getProjects(),
     getReviewStats(),
   ]);
+  const featured = projects.filter((project) => project.featured);
+  const work = featured.length ? featured : projects.slice(0, 3);
+  const history = buildHistory(site.skills, projects);
   const marquee = skillItems(site);
   const { first, last } = displayName(site.name);
   const workHref = navHref(site, "work", "#work");
@@ -111,7 +115,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="mt-6">
-          {projects.map((project, index) => (
+          {work.map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
@@ -162,7 +166,7 @@ export default async function HomePage() {
       <div className="border-y border-[var(--line)] bg-[var(--bg-soft)]">
         <SkillsSection
           groups={sanitizeSkills(site.skills)}
-          timeline={site.timeline}
+          timeline={history}
           copy={{
             skillsKicker: site.copy.skillsKicker,
             skillsHeading: site.copy.skillsHeading,
@@ -173,7 +177,7 @@ export default async function HomePage() {
         />
         <HistoryGraph
           className="pt-4 sm:pt-6"
-          items={site.timeline}
+          items={history}
           copy={{
             timelineKicker: site.copy.timelineKicker,
             timelineHeading: site.copy.timelineHeading,
