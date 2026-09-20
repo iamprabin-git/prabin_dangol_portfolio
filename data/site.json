@@ -9,8 +9,8 @@
   "availability": "Available for freelance & full-time roles",
   "resumeUrl": "/resume.pdf",
   "photos": {
-    "portrait": "/uploads/1789844406003-3c3239f7.png",
-    "workspace": "/uploads/1789844406006-9a0d4871.png"
+    "portrait": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894986/portfolio/portrait.png",
+    "workspace": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894987/portfolio/workspace.png"
   },
   "social": {
     "github": "https://github.com/prabindangol",

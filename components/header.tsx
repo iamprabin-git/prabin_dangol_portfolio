@@ -11,8 +11,14 @@ import { cn } from "@/lib/utils";
 export function Header({ site }: { site: SiteContent }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [menuPath, setMenuPath] = useState(pathname);
   const [scrolled, setScrolled] = useState(false);
   const contactHref = navHref(site, "contact", "/#contact");
+
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -20,10 +26,6 @@ export function Header({ site }: { site: SiteContent }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";

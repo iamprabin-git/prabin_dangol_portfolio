@@ -13,8 +13,10 @@ export const defaultSite: SiteContent = {
   availability: "Available for freelance & full-time roles",
   resumeUrl: "/resume.pdf",
   photos: {
-    portrait: "/profile/prabin-portrait.jpg",
-    workspace: "/profile/prabin-workspace.jpg",
+    portrait:
+      "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894986/portfolio/portrait.png",
+    workspace:
+      "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894987/portfolio/workspace.png",
   },
   social: {
     github: "https://github.com/prabindangol",

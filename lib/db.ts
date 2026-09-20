@@ -80,12 +80,7 @@ export async function ensureSchema() {
         value JSONB NOT NULL,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )`;
-      await db`CREATE TABLE IF NOT EXISTS portfolio_files (
-        id TEXT PRIMARY KEY,
-        mime TEXT NOT NULL,
-        data BYTEA NOT NULL,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )`;
+      // Legacy BYTEA table only. New images live on Cloudinary; Neon keeps URLs in JSON.
     })().catch((error) => {
       schemaReady = null;
       throw error;
@@ -125,15 +120,6 @@ function toBytes(value: unknown): Uint8Array {
     return Uint8Array.from(Buffer.from(hex, "hex"));
   }
   throw new Error("Invalid file data.");
-}
-
-export async function putFile(id: string, mime: string, bytes: Uint8Array) {
-  await ensureSchema();
-  await sql()`
-    INSERT INTO portfolio_files (id, mime, data)
-    VALUES (${id}, ${mime}, ${Buffer.from(bytes)})
-    ON CONFLICT (id) DO UPDATE SET mime = EXCLUDED.mime, data = EXCLUDED.data
-  `;
 }
 
 export async function getFile(id: string) {

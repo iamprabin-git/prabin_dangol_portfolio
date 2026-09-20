@@ -49,8 +49,11 @@ export function ThemeToggle({ className }: { className?: string }) {
   useEffect(() => {
     const current = resolveTheme();
     applyTheme(current);
-    setTheme(current);
-    setReady(true);
+    const sync = () => {
+      setTheme(current);
+      setReady(true);
+    };
+    queueMicrotask(sync);
 
     const onStorage = (event: StorageEvent) => {
       if (event.key !== THEME_STORAGE_KEY || !isTheme(event.newValue)) return;

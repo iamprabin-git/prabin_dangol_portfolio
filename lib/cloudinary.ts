@@ -101,6 +101,18 @@ export async function uploadImageFile(file: File) {
   return optimizedDeliveryUrl(result.secure_url);
 }
 
+export async function uploadImagePath(filePath: string, publicId: string) {
+  configure();
+  const result = await cloudinary.uploader.upload(filePath, {
+    public_id: publicId,
+    overwrite: true,
+    invalidate: true,
+    resource_type: "image",
+  });
+  if (!result.secure_url) throw new Error("Cloudinary did not return an image URL.");
+  return optimizedDeliveryUrl(result.secure_url);
+}
+
 export async function destroyCloudinaryImage(url: string) {
   const publicId = cloudinaryPublicId(url);
   if (!publicId || !hasCloudinary()) return;

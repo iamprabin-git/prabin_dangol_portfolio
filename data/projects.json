@@ -5,8 +5,13 @@
     "slug": "northstar-commerce",
     "summary": "A headless storefront with instant search, editorial product pages, and a calm checkout.",
     "description": "Northstar is a Next.js storefront for independent brands. Catalog data lives in Postgres, images are optimized at the edge, and checkout stays on a single page so nothing feels like a funnel. I designed the product templates, built the cart, and wired Stripe without turning the UI into a theme.",
-    "tags": ["Next.js", "Stripe", "PostgreSQL", "Tailwind"],
-    "imageUrl": "/projects/northstar.jpg",
+    "tags": [
+      "Next.js",
+      "Stripe",
+      "PostgreSQL",
+      "Tailwind"
+    ],
+    "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894987/portfolio/projects/northstar-commerce.jpg",
     "liveUrl": "https://demo.vercel.store",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -20,8 +25,13 @@
     "slug": "lumen-analytics",
     "summary": "A metrics dashboard that makes team health readable in one glance — no 40-widget soup.",
     "description": "Lumen replaces noisy BI screens with a few honest charts, saved views, and role-aware filters. Built as a Next.js app with streamed server components, it loads the shell first and paints charts as queries resolve. I owned the data model, chart system, and the empty states that actually explain what to do next.",
-    "tags": ["Next.js", "TypeScript", "Recharts", "Auth"],
-    "imageUrl": "/projects/lumen.jpg",
+    "tags": [
+      "Next.js",
+      "TypeScript",
+      "Recharts",
+      "Auth"
+    ],
+    "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894988/portfolio/projects/lumen-analytics.jpg",
     "liveUrl": "https://ui.shadcn.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -35,8 +45,13 @@
     "slug": "fieldnote",
     "summary": "A writing app for people who think in fragments and later want a finished page.",
     "description": "Fieldnote stores notes as markdown, supports inline /commands, and publishes a public garden when you are ready. Offline-first on the client, synced through a small Node API. I designed the typography, keyboard flows, and the publish pipeline.",
-    "tags": ["React", "Node.js", "Markdown", "PWA"],
-    "imageUrl": "/projects/fieldnote.jpg",
+    "tags": [
+      "React",
+      "Node.js",
+      "Markdown",
+      "PWA"
+    ],
+    "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894989/portfolio/projects/fieldnote.jpg",
     "liveUrl": "https://www.notion.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,
@@ -50,8 +65,13 @@
     "slug": "atlas-stay",
     "summary": "A stay-booking interface that treats maps, dates, and rooms as one continuous gesture.",
     "description": "Atlas Stay is a booking UI kit turned into a working product: map-linked listings, price calendars, and a guest flow that never dumps you into a new layout. I built the search, availability engine hooks, and the responsive map/list split.",
-    "tags": ["Next.js", "Mapbox", "UX", "API"],
-    "imageUrl": "/projects/atlas.jpg",
+    "tags": [
+      "Next.js",
+      "Mapbox",
+      "UX",
+      "API"
+    ],
+    "imageUrl": "https://res.cloudinary.com/dqq5exoiz/image/upload/f_auto/q_auto/v1789894989/portfolio/projects/atlas-stay.jpg",
     "liveUrl": "https://www.airbnb.com",
     "githubUrl": "https://github.com/prabindangol",
     "featured": true,

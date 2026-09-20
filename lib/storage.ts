@@ -20,7 +20,6 @@ export { hasCloudinary };
 
 const PROJECTS_BLOB = "portfolio/projects.json";
 const DATA_FILE = path.join(process.cwd(), "data", "projects.json");
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 const ALLOWED_TYPES = new Set([
   "image/jpeg",
@@ -126,17 +125,6 @@ export async function writeProjects(projects: Project[]) {
   await writeJsonRecord(PROJECTS_BLOB, "projects.json", projects);
 }
 
-function extensionFor(file: File) {
-  const fromName = path.extname(file.name).toLowerCase();
-  if (fromName) return fromName;
-  if (file.type === "image/jpeg") return ".jpg";
-  if (file.type === "image/png") return ".png";
-  if (file.type === "image/webp") return ".webp";
-  if (file.type === "image/gif") return ".gif";
-  if (file.type === "image/svg+xml") return ".svg";
-  return ".png";
-}
-
 export async function saveImage(file: File) {
   if (!ALLOWED_TYPES.has(file.type)) {
     throw new Error("Please upload a JPG, PNG, WebP, GIF, or SVG image.");
@@ -144,22 +132,17 @@ export async function saveImage(file: File) {
   if (file.size > MAX_IMAGE_BYTES) {
     throw new Error("Images must be 4MB or smaller (Vercel Hobby request limit).");
   }
-
-  if (hasCloudinary()) {
-    return uploadImageFile(file);
-  }
-
-  if (isVercel()) {
+  if (!hasCloudinary()) {
     throw new Error(
-      "Set CLOUDINARY_URL in Vercel Environment Variables, then redeploy. Images are stored in Cloudinary; the database keeps only the URL.",
+      "Set CLOUDINARY_URL, then restart or redeploy. Images upload to Cloudinary first; Neon stores only the URL.",
     );
   }
 
-  const filename = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}${extensionFor(file)}`;
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
-  const bytes = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes);
-  return `/uploads/${filename}`;
+  const url = await uploadImageFile(file);
+  if (!isCloudinaryUrl(url)) {
+    throw new Error("Cloudinary did not return a valid image URL.");
+  }
+  return url;
 }
 
 export async function deleteStoredImage(imageUrl: string) {
